@@ -75,10 +75,11 @@ p {
     border-radius: 12px;
     transform: rotate(0deg);
 }
-@media (max-width: 724px){
-    .imagem-modal{
+@media (max-width: 724px) {
+    .imagem-modal {
         transform: rotate(90deg);
-        width: 350px;
+        width: 550px;
         height: 290px;
+        background: rgba(0, 0, 0, 0.8);
     }
 }
