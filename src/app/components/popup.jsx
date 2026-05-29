@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function CityPopup({ cidade }) {
+export default function CityPopup({ cidade, abrirImagem }) {
     return (
         <div>
             <figure>
@@ -10,6 +10,7 @@ export default function CityPopup({ cidade }) {
                     width={290}
                     height={180}
                     className="img"
+                    onClick={() => abrirImagem(cidade.foto)}
                 />
             </figure>
             <div className="main">

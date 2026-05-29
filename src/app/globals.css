@@ -57,11 +57,14 @@ li {
 .img {
     border: 3px solid black;
     border-radius: 10px;
+    cursor: pointer;
 }
-h1, h2, p{
+h1,
+h2,
+p {
     display: flex;
     justify-content: center;
 }
-p{
+p {
     font-size: 16px;
 }

@@ -1,17 +1,13 @@
 "use client";
 import { cidades } from "../data/cidades";
 import CityPopup from "./popup";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { useMap } from "react-leaflet";
+import Image from "next/image";
 
 const MapContainer = dynamic(
     () => import("react-leaflet").then((mod) => mod.MapContainer),
-    {
-        ssr: false,
-    },
-);
-const TileLayer = dynamic(
-    () => import("react-leaflet").then((mod) => mod.TileLayer),
     {
         ssr: false,
     },
@@ -31,7 +27,42 @@ const Tooltip = dynamic(
         ssr: false,
     },
 );
+function MapController() {
+    const map = useMap();
+
+    useEffect(() => {
+        const L = require("leaflet");
+        const normal = L.tileLayer(
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        );
+
+        const topo = L.tileLayer(
+            "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
+        );
+
+        const satelite = L.tileLayer(
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        );
+
+        const baseMaps = {
+            Normal: normal,
+            Topográfico: topo,
+            Satélite: satelite,
+        };
+
+        normal.addTo(map);
+
+        const control = L.control.layers(baseMaps).addTo(map);
+        return () => {
+            map.removeControl(control);
+        };
+    }, [map]);
+
+    return null;
+}
 export default function MapComponent() {
+    const [imagemAberta, setImagemAberta] = useState(null);
+
     useEffect(() => {
         import("leaflet").then((L) => {
             delete L.Icon.Default.prototype._getIconUrl;
@@ -44,22 +75,57 @@ export default function MapComponent() {
         });
     }, []);
     return (
-        <MapContainer
-            center={[39, 22]}
-            zoom={6}
-            style={{ height: "100vh", width: "100%" }}
-        >
-            <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {cidades.map((cidade, index) => (
-                <Marker key={index} position={cidade.posicao}>
-                    <Tooltip direction="top" offset={[-14, -15]} opacity={1}>
-                        {cidade.nome}
-                    </Tooltip>
-                    <Popup className="popup">
-                        <CityPopup cidade={cidade} />
-                    </Popup>
-                </Marker>
-            ))}
-        </MapContainer>
+        <div>
+            <MapContainer
+                center={[39, 22]}
+                zoom={6}
+                style={{ height: "100vh", width: "100%" }}
+            >
+                <MapController />
+                {cidades.map((cidade, index) => (
+                    <Marker key={index} position={cidade.posicao}>
+                        <Tooltip
+                            direction="top"
+                            offset={[-14, -15]}
+                            opacity={1}
+                        >
+                            {cidade.nome}
+                        </Tooltip>
+                        <Popup className="popup">
+                            <CityPopup
+                                cidade={cidade}
+                                abrirImagem={setImagemAberta}
+                            />
+                        </Popup>
+                    </Marker>
+                ))}
+            </MapContainer>
+            {imagemAberta && (
+                <div
+                    onClick={() => setImagemAberta(null)}
+                    style={{
+                        position: "fixed",
+                        inset: 0,
+                        background: "rgba(0, 0, 0, 0.8)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        zIndex: 9999,
+                    }}
+                >
+                    <Image
+                        width={950}
+                        height={690}
+                        src={imagemAberta}
+                        alt="foto da cidade"
+                        style={{
+                            maxWidth: "90%",
+                            maxHeight: "90%",
+                            borderRadius: "12px",
+                        }}
+                    />
+                </div>
+            )}
+        </div>
     );
 }
