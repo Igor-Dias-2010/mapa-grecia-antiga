@@ -70,8 +70,6 @@ p {
 }
 .imagem-modal {
     border: 3px solid black;
-    max-width: 90vw;
-    max-height: 90vh;
     border-radius: 12px;
     transform: rotate(0deg);
 }
