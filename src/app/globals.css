@@ -78,5 +78,7 @@ p {
 @media (max-width: 724px){
     .imagem-modal{
         transform: rotate(90deg);
+        width: 750px;
+        height: 490px;
     }
 }
