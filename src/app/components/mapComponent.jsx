@@ -106,7 +106,7 @@ export default function MapComponent() {
                     style={{
                         position: "fixed",
                         inset: 0,
-                        background: "rgba(0, 0, 0, 0.8)",
+                        background: "rgba(0, 0, 0, 0.5)",
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
@@ -119,6 +119,7 @@ export default function MapComponent() {
                         src={imagemAberta}
                         alt="foto da cidade"
                         style={{
+                            border: '3px solid black',
                             maxWidth: "90%",
                             maxHeight: "90%",
                             borderRadius: "12px",
