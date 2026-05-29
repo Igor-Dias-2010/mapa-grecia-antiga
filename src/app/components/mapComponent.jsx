@@ -114,16 +114,11 @@ export default function MapComponent() {
                     }}
                 >
                     <Image
+                    className="imagem-modal"
                         width={950}
                         height={690}
                         src={imagemAberta}
                         alt="foto da cidade"
-                        style={{
-                            border: '3px solid black',
-                            maxWidth: "90%",
-                            maxHeight: "90%",
-                            borderRadius: "12px",
-                        }}
                     />
                 </div>
             )}

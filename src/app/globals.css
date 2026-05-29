@@ -68,3 +68,15 @@ p {
 p {
     font-size: 16px;
 }
+.imagem-modal {
+    border: 3px solid black;
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    transform: rotate(0deg);
+}
+@media (max-width: 724px){
+    .imagem-modal{
+        transform: rotate(90deg);
+    }
+}
