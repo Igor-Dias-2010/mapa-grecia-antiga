@@ -52,7 +52,7 @@ export default function MapComponent() {
             <TileLayer url="https://tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {cidades.map((cidade, index) => (
                 <Marker key={index} position={cidade.posicao}>
-                    <Tooltip direction="top" offset={[-14, -15]} opacity={1} permanent>
+                    <Tooltip direction="top" offset={[-14, -15]} opacity={1}>
                         {cidade.nome}
                     </Tooltip>
                     <Popup className="popup">
