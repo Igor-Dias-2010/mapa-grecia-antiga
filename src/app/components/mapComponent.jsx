@@ -1,4 +1,7 @@
 "use client";
+
+import { conquistas } from "../data/consquistas";
+import { rotas } from "../data/rotas";
 import { cidades } from "../data/cidades";
 import CityPopup from "./popup";
 import { useState, useEffect } from "react";
@@ -6,8 +9,21 @@ import dynamic from "next/dynamic";
 import { useMap } from "react-leaflet";
 import Image from "next/image";
 
+const Polyline = dynamic(
+    () => import("react-leaflet").then((mod) => mod.Polyline),
+    {
+        ssr: false,
+    },
+);
+
 const MapContainer = dynamic(
     () => import("react-leaflet").then((mod) => mod.MapContainer),
+    {
+        ssr: false,
+    },
+);
+const CircleMarker = dynamic(
+    () => import("react-leaflet").then((mod) => mod.CircleMarker),
     {
         ssr: false,
     },
@@ -82,6 +98,29 @@ export default function MapComponent() {
                 style={{ height: "100vh", width: "100%" }}
             >
                 <MapController />
+                <Polyline
+                    positions={rotas}
+                    pathOptions={{
+                        color: "red",
+                        weight: 4,
+                    }}
+                />
+                {conquistas.map((local, index) => (
+                    <CircleMarker key={index} position={local.posicao} center={local.posicao} radius={8} pathOptions={{color: 'white', fillColor: 'red', fillOpacity: 1,}}>
+                        <Tooltip
+                            direction="top"
+                            offset={[2, -10]}
+                            opacity={1}
+                        >
+                            {local.nome}
+                        </Tooltip>
+
+                        <Popup className="popup">
+                            <h2>{local.nome}</h2>
+                            <p>{local.descricao}</p>
+                        </Popup>
+                    </CircleMarker>
+                ))}
                 {cidades.map((cidade, index) => (
                     <Marker key={index} position={cidade.posicao}>
                         <Tooltip
@@ -114,7 +153,7 @@ export default function MapComponent() {
                     }}
                 >
                     <Image
-                    className="imagem-modal"
+                        className="imagem-modal"
                         width={950}
                         height={690}
                         src={imagemAberta}
