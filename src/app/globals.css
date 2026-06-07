@@ -17,7 +17,7 @@ li {
 li:first-of-type {
     margin-top: 10px;
 }
-li:last-of-type{
+li:last-of-type {
     margin-bottom: 30px;
 }
 .popup {
@@ -50,6 +50,48 @@ p {
         background: rgba(0, 0, 0, 0.9);
     }
 }
-h1{
+h1 {
     margin-top: 5px;
+}
+.markers {
+    font-size: 24px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 45px;
+    height: 45px;
+
+    background: white;
+
+    border: 2px solid red;
+    border-radius: 50%;
+    transition: 0.5s;
+}
+.markers:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px black;
+}
+.markers:active {
+    transform: scale(0.9);
+    box-shadow: none;
+}
+button {
+    cursor: pointer;
+}
+.botao-mapa-inteiro {
+    position: absolute;
+    top: 90px;
+    right: 10px;
+    z-index: 1000;
+    width: 55px;
+    height: 55px;
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+.botao-mapa-inteiro:hover {
+    background: #f4f4f4;
 }

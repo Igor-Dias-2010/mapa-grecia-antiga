@@ -1,9 +1,12 @@
 "use client";
 
+import { BotaoMapaCompleto } from "../functions/botaoMapaCompleto";
+import { batalhas } from "../data/batalhas";
 import { conquistas } from "../data/consquistas";
 import { rotas } from "../data/rotas";
 import { cidades } from "../data/cidades";
-import CityPopup from "./popup";
+import ConquistasPopup from "./conquistas-popup";
+import CityPopup from "./city-popup";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useMap } from "react-leaflet";
@@ -18,12 +21,6 @@ const Polyline = dynamic(
 
 const MapContainer = dynamic(
     () => import("react-leaflet").then((mod) => mod.MapContainer),
-    {
-        ssr: false,
-    },
-);
-const CircleMarker = dynamic(
-    () => import("react-leaflet").then((mod) => mod.CircleMarker),
     {
         ssr: false,
     },
@@ -78,6 +75,9 @@ function MapController() {
 }
 export default function MapComponent() {
     const [imagemAberta, setImagemAberta] = useState(null);
+    const [batalhaIcon, setBatalhaIcon] = useState(null);
+    const [conquistaIcon, setConquistaIcon] = useState(null);
+    const [cidadesIcon, setCidadesIcon] = useState(null);
 
     useEffect(() => {
         import("leaflet").then((L) => {
@@ -88,16 +88,38 @@ export default function MapComponent() {
                 iconUrl: "/leaflet/marker-icon.png",
                 shadowUrl: "/leaflet/marker-shadow.png",
             });
+            setBatalhaIcon(
+                L.divIcon({
+                    html: '<div class="markers">⚔️</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            setConquistaIcon(
+                L.divIcon({
+                    html: '<div class="markers">🚩</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            setCidadesIcon(
+                L.divIcon({
+                    html: '<div class="markers">🏛️</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
         });
     }, []);
     return (
         <div>
             <MapContainer
                 center={[39, 22]}
-                zoom={6}
+                zoom={7}
                 style={{ height: "100vh", width: "100%" }}
             >
                 <MapController />
+                <BotaoMapaCompleto />
                 <Polyline
                     positions={rotas}
                     pathOptions={{
@@ -105,32 +127,107 @@ export default function MapComponent() {
                         weight: 4,
                     }}
                 />
-                {conquistas.map((local, index) => (
-                    <CircleMarker key={index} position={local.posicao} center={local.posicao} radius={8} pathOptions={{color: 'white', fillColor: 'red', fillOpacity: 1,}}>
-                        <Tooltip
-                            direction="top"
-                            offset={[2, -10]}
-                            opacity={1}
+                {batalhaIcon &&
+                    batalhas.map((batalha, index) => (
+                        <Marker
+                            key={index}
+                            position={batalha.posicao}
+                            icon={batalhaIcon}
                         >
-                            {local.nome}
-                        </Tooltip>
+                            <Tooltip
+                                direction="top"
+                                offset={[9, -15]}
+                                opacity={1}
+                            >
+                                {batalha.nome}
+                            </Tooltip>
 
-                        <Popup className="popup">
-                            <h2>{local.nome}</h2>
-                            <p>{local.descricao}</p>
-                        </Popup>
-                    </CircleMarker>
-                ))}
-                {cidades.map((cidade, index) => (
-                    <Marker key={index} position={cidade.posicao}>
-                        <Tooltip
-                            direction="top"
-                            offset={[-14, -15]}
-                            opacity={1}
+                            <Popup
+                                className="popup"
+                                direction="top"
+                                offset={[8, -5]}
+                                opacity={1}
+                            >
+                                <h2>{batalha.nome}</h2>
+                                <ul>
+                                    <li>
+                                        <strong>Importância:</strong>{" "}
+                                        {batalha.importancia}
+                                    </li>
+
+                                    <li>
+                                        <strong>Contribuição:</strong>{" "}
+                                        {batalha.contribuicao}
+                                    </li>
+
+                                    <li>
+                                        <strong>Resultado:</strong>{" "}
+                                        {batalha.resultado}
+                                    </li>
+                                </ul>
+                            </Popup>
+                        </Marker>
+                    ))}
+                {conquistas &&
+                    conquistas.map((local, index) => (
+                        <Marker
+                            key={index}
+                            position={local.posicao}
+                            icon={conquistaIcon}
                         >
+                            <Tooltip
+                                direction="top"
+                                offset={[8, -15]}
+                                opacity={1}
+                            >
+                                {local.nome}
+                            </Tooltip>
+
+                            <Popup
+                                className="popup"
+                                direction="top"
+                                offset={[8, -5]}
+                                opacity={1}
+                            >
+                                <ConquistasPopup
+                                    cidade={local}
+                                    abrirImagem={setImagemAberta}
+                                />
+                                <h1>{local.nome}</h1>
+                                <p>{local.descricao}</p>
+                                <h2>Importâncias</h2>
+                                <ul>
+                                    <li>
+                                        <strong>Territorial:</strong>{" "}
+                                        {local.importancia.territorial}
+                                    </li>
+                                    <li>
+                                        <strong>Militar:</strong>{" "}
+                                        {local.importancia.militar}
+                                    </li>
+                                    <li>
+                                        <strong>Econômica:</strong>{" "}
+                                        {local.importancia.economica}
+                                    </li>
+                                </ul>
+                            </Popup>
+                        </Marker>
+                    ))}
+                {cidades.map((cidade, index) => (
+                    <Marker
+                        key={index}
+                        position={cidade.posicao}
+                        icon={cidadesIcon}
+                    >
+                        <Tooltip direction="top" offset={[9, -15]} opacity={1}>
                             {cidade.nome}
                         </Tooltip>
-                        <Popup className="popup">
+                        <Popup
+                            className="popup"
+                            direction="top"
+                            offset={[8, -5]}
+                            opacity={1}
+                        >
                             <CityPopup
                                 cidade={cidade}
                                 abrirImagem={setImagemAberta}
