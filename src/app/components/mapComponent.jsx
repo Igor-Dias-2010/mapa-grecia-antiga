@@ -5,6 +5,12 @@ import { batalhas } from "../data/batalhas";
 import { conquistas } from "../data/consquistas";
 import { rotas } from "../data/rotas";
 import { cidades } from "../data/cidades";
+import { centro } from "../data/centros";
+import { difusaoHelenistica } from "../data/difusao";
+import { cidadesComerciais } from "../data/cidadesComerciais";
+import { portos } from "../data/portos";
+import { rotasMediterraneo } from "../data/rotasMaritimas";
+import CentrosPopup from "./centros-popup";
 import ConquistasPopup from "./conquistas-popup";
 import CityPopup from "./city-popup";
 import { useState, useEffect } from "react";
@@ -78,6 +84,10 @@ export default function MapComponent() {
     const [batalhaIcon, setBatalhaIcon] = useState(null);
     const [conquistaIcon, setConquistaIcon] = useState(null);
     const [cidadesIcon, setCidadesIcon] = useState(null);
+    const [centroIcon, setCentroIcon] = useState(null);
+    const [iconesDifusao, setIconesDifusao] = useState({});
+    const [portoIcon, setPortoIcon] = useState(null);
+    const [comercialIcon, setComercialIcon] = useState(null);
 
     useEffect(() => {
         import("leaflet").then((L) => {
@@ -109,13 +119,46 @@ export default function MapComponent() {
                     iconSize: [30, 30],
                 }),
             );
+            setPortoIcon(
+                L.divIcon({
+                    html: '<div class="markers">🚢</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+
+            setComercialIcon(
+                L.divIcon({
+                    html: '<div class="markers">💰</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            setCentroIcon(
+                L.divIcon({
+                    html: '<div class="markers">🎓</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            const novosIcones = {};
+
+            difusaoHelenistica.forEach((item) => {
+                novosIcones[item.nome] = L.divIcon({
+                    html: `<div class="markers">${item.emoji}</div>`,
+                    className: "",
+                    iconSize: [30, 30],
+                });
+            });
+
+            setIconesDifusao(novosIcones);
         });
     }, []);
     return (
         <div>
             <MapContainer
-                center={[39, 22]}
-                zoom={7}
+                center={[35, 40]}
+                zoom={4}
                 style={{ height: "100vh", width: "100%" }}
             >
                 <MapController />
@@ -127,6 +170,60 @@ export default function MapComponent() {
                         weight: 4,
                     }}
                 />
+                {portoIcon &&
+                    portos.map((porto, index) => (
+                        <Marker
+                            key={index}
+                            position={porto.posicao}
+                            icon={portoIcon}
+                        >
+                            <Tooltip
+                                direction="top"
+                                offset={[9, -15]}
+                                opacity={1}
+                            >
+                                {porto.nome}
+                            </Tooltip>
+
+                            <Popup>
+                                <h1>{porto.nome}</h1>
+                                <p>{porto.importancia}</p>
+                            </Popup>
+                        </Marker>
+                    ))}
+                {comercialIcon &&
+                    cidadesComerciais.map((cidade, index) => (
+                        <Marker
+                            key={index}
+                            position={cidade.posicao}
+                            icon={comercialIcon}
+                        >
+                            <Tooltip
+                                className="tooltip"
+                                direction="top"
+                                offset={[9, -15]}
+                                opacity={1}
+                            >
+                                {cidade.nome}
+                            </Tooltip>
+
+                            <Popup>
+                                <h1>{cidade.nome}</h1>
+                                <p>{cidade.importancia}</p>
+                            </Popup>
+                        </Marker>
+                    ))}
+                {rotasMediterraneo.map((rota, index) => (
+                    <Polyline
+                        key={index}
+                        positions={rota}
+                        pathOptions={{
+                            color: "#0066ff",
+                            weight: 4,
+                            dashArray: "10, 10",
+                        }}
+                    />
+                ))}
                 {batalhaIcon &&
                     batalhas.map((batalha, index) => (
                         <Marker
@@ -213,6 +310,98 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
+                {centro &&
+                    centro.map((centro, index) => (
+                        <Marker
+                            key={index}
+                            position={centro.posicao}
+                            icon={centroIcon}
+                        >
+                            <Tooltip
+                                direction="top"
+                                offset={[9, -15]}
+                                opacity={1}
+                            >
+                                {centro.nome}
+                            </Tooltip>
+                            <Popup
+                                className="popup"
+                                direction="top"
+                                offset={[8, -5]}
+                                opacity={1}
+                            >
+                                <CentrosPopup
+                                    cidade={centro}
+                                    abrirImagem={setImagemAberta}
+                                />
+                                <h1>{centro.nome}</h1>
+                                <p>{centro.descricao}</p>
+
+                                <h2>Importâncias</h2>
+
+                                <ul>
+                                    <li>
+                                        <strong>Função cultural:</strong>{" "}
+                                        {centro.importancia.cultural}
+                                    </li>
+
+                                    <li>
+                                        <strong>
+                                            Circulação de conhecimento:
+                                        </strong>{" "}
+                                        {centro.importancia.conhecimento}
+                                    </li>
+
+                                    <li>
+                                        <strong>Importância comercial:</strong>{" "}
+                                        {centro.importancia.comercial}
+                                    </li>
+
+                                    <li>
+                                        <strong>
+                                            Difusão da cultura grega:
+                                        </strong>{" "}
+                                        {centro.importancia.difusao}
+                                    </li>
+                                </ul>
+                            </Popup>
+                        </Marker>
+                    ))}
+                {difusaoHelenistica.map((item, index) => (
+                    <div key={index}>
+                        <Polyline
+                            positions={item.cidades.map(
+                                (cidade) => cidade.posicao,
+                            )}
+                            pathOptions={{
+                                color: item.cor,
+                                weight: 2,
+                                dashArray: "8, 8",
+                            }}
+                        />
+
+                        {item.cidades.map((cidade, i) => (
+                            <Marker
+                                key={i}
+                                position={cidade.posicao}
+                                icon={iconesDifusao[item.nome]}
+                            >
+                                <Tooltip
+                                    direction="top"
+                                    offset={[9, -15]}
+                                    opacity={1}
+                                >
+                                    {item.nome}
+                                </Tooltip>
+
+                                <Popup>
+                                    <h2>{item.nome}</h2>
+                                    <p>{cidade.nome}</p>
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </div>
+                ))}
                 {cidades.map((cidade, index) => (
                     <Marker
                         key={index}

@@ -95,3 +95,8 @@ button {
 .botao-mapa-inteiro:hover {
     background: #f4f4f4;
 }
+.tooltip{
+    direction: top;
+    offset: 9, -15;
+    opacity: 1;
+}

@@ -1,4 +1,5 @@
-export const conquistas = [
+export const 
+conquistas = [
     {
         nome: "Ásia Menor",
         posicao: [39.0, 35.0],
