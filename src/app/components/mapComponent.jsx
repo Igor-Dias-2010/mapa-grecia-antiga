@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useMap } from "react-leaflet";
 import Image from "next/image";
+import { Fragment } from "react";
 
 const Polyline = dynamic(
     () => import("react-leaflet").then((mod) => mod.Polyline),
@@ -88,6 +89,9 @@ export default function MapComponent() {
     const [iconesDifusao, setIconesDifusao] = useState({});
     const [portoIcon, setPortoIcon] = useState(null);
     const [comercialIcon, setComercialIcon] = useState(null);
+    const [inicioIcon, setInicioIcon] = useState(null);
+    const [fimIcon, setFimIcon] = useState(null);
+    const [paradaIcon, setParadaIcon] = useState(null);
 
     useEffect(() => {
         import("leaflet").then((L) => {
@@ -132,6 +136,27 @@ export default function MapComponent() {
                     html: '<div class="markers">💰</div>',
                     className: "",
                     iconSize: [30, 30],
+                }),
+            );
+            setInicioIcon(
+                L.divIcon({
+                    html: '<div class="markers">⚓</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            setFimIcon(
+                L.divIcon({
+                    html: '<div class="markers">🏁</div>',
+                    className: "",
+                    iconSize: [30, 30],
+                }),
+            );
+            setParadaIcon(
+                L.divIcon({
+                    html: '<div class="markers">📍</div>',
+                    className: "",
+                    iconSize: [20, 20],
                 }),
             );
             setCentroIcon(
@@ -213,16 +238,32 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {rotasMediterraneo.map((rota, index) => (
-                    <Polyline
-                        key={index}
-                        positions={rota}
-                        pathOptions={{
-                            color: "#0066ff",
-                            weight: 4,
-                            dashArray: "10, 10",
-                        }}
-                    />
+                {rotasMediterraneo.map((rota, rotaIndex) => (
+                    <Fragment key={rotaIndex}>
+                        <Polyline
+                            positions={rota}
+                            pathOptions={{
+                                color: "#0066ff",
+                                weight: 2,
+                                opacity: 0.5,
+                                dashArray: "8, 8",
+                            }}
+                        />
+
+                        {rota.map((ponto, pontoIndex) => (
+                            <Marker
+                                key={`${rotaIndex}-${pontoIndex}`}
+                                position={ponto}
+                                icon={
+                                    pontoIndex === 0
+                                        ? inicioIcon
+                                        : pontoIndex === rota.length - 1
+                                          ? fimIcon
+                                          : paradaIcon
+                                }
+                            />
+                        ))}
+                    </Fragment>
                 ))}
                 {batalhaIcon &&
                     batalhas.map((batalha, index) => (
@@ -376,7 +417,7 @@ export default function MapComponent() {
                             pathOptions={{
                                 color: item.cor,
                                 weight: 2,
-                                dashArray: "8, 8",
+                                dashArray: "7, 7",
                             }}
                         />
 
