@@ -10,7 +10,7 @@ export function BotaoMapaCompleto() {
             }}
             className="botao-mapa-inteiro"
         >
-            Mostrar conteúdo principal
+            Mostrar conteúdo completo
         </button>
     );
 }

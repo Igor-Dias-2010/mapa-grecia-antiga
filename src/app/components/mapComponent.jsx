@@ -1,5 +1,6 @@
 "use client";
 
+import Legendas from "./legendas";
 import { infoRotas } from "../data/infoRotas";
 import { BotaoMapaCompleto } from "../functions/botaoMapaCompleto";
 import { batalhas } from "../data/batalhas";
@@ -232,6 +233,7 @@ export default function MapComponent() {
     }, []);
     return (
         <div>
+            <Legendas />
             <MapContainer
                 center={[35, 40]}
                 zoom={4}
@@ -290,53 +292,70 @@ export default function MapComponent() {
                         </Marker>
                     ))}
                 {rotasMediterraneo.map((rota, rotaIndex) => {
-                    const info = infoRotas[rotaIndex]
-                    return(
-<Fragment key={rotaIndex}>
-                        <Polyline
-                            positions={rota}
-                            eventHandlers={{
-                                mouseover: () => setRotaAtiva(rotaIndex),
-                                mouseout: () => setRotaAtiva(null),
-                            }}
-                            pathOptions={{
-                                color:
-                                    rotaAtiva === rotaIndex
-                                        ? "#0066ff"
-                                        : "#0066ff",
-                                weight: rotaAtiva === rotaIndex ? 5 : 2,
-                                opacity: rotaAtiva === rotaIndex ? 1 : 0.5,
-                                dashArray:
-                                    rotaAtiva === rotaIndex ? null : "8, 8",
-                            }}
-                        />
-                        <SetasRota
-                            rota={rota}
-                            ativa={rotaAtiva === rotaIndex}
-                        />
+                    const info = infoRotas[rotaIndex];
 
-                        {rota.map((ponto, pontoIndex) => (
-                            <Marker
-                                key={`${rotaIndex}-${pontoIndex}`}
-                                position={ponto}
-                                icon={
-                                    pontoIndex === 0
-                                        ? inicioIcon
-                                        : pontoIndex === rota.length - 1
-                                          ? fimIcon
-                                          : paradaIcon
-                                }
+                    return (
+                        <Fragment key={rotaIndex}>
+                            <Polyline
+                                positions={rota}
                                 eventHandlers={{
                                     mouseover: () => setRotaAtiva(rotaIndex),
                                     mouseout: () => setRotaAtiva(null),
                                 }}
+                                pathOptions={{
+                                    color: "#0066ff",
+                                    weight: rotaAtiva === rotaIndex ? 5 : 2,
+                                    opacity: rotaAtiva === rotaIndex ? 1 : 0.5,
+                                    dashArray:
+                                        rotaAtiva === rotaIndex ? null : "8, 8",
+                                }}
                             />
-                            </Fragment>
-                        ),
-                        
-                )}
 
-                    
+                            <SetasRota
+                                rota={rota}
+                                ativa={rotaAtiva === rotaIndex}
+                            />
+
+                            {rota.map((ponto, pontoIndex) => {
+                                const nomePonto = info.pontos[pontoIndex];
+
+                                return (
+                                    <Marker
+                                        key={`${rotaIndex}-${pontoIndex}`}
+                                        position={ponto}
+                                        icon={
+                                            pontoIndex === 0
+                                                ? inicioIcon
+                                                : pontoIndex === rota.length - 1
+                                                  ? fimIcon
+                                                  : paradaIcon
+                                        }
+                                        eventHandlers={{
+                                            mouseover: () =>
+                                                setRotaAtiva(rotaIndex),
+                                            mouseout: () => setRotaAtiva(null),
+                                        }}
+                                    >
+                                        <Tooltip
+                                            direction="top"
+                                            offset={[9, -15]}
+                                            opacity={1}
+                                        >
+                                            {nomePonto}
+                                        </Tooltip>
+
+                                        <Popup>
+                                            <h2>{nomePonto}</h2>
+                                            <h3>{info.nome}</h3>
+                                            <p>{info.importancia}</p>
+                                        </Popup>
+                                    </Marker>
+                                );
+                            })}
+                        </Fragment>
+                    );
+                })}
+
                 {batalhaIcon &&
                     batalhas.map((batalha, index) => (
                         <Marker
