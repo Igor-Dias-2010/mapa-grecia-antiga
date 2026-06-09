@@ -109,6 +109,7 @@ button {
     top: 50%;
     transform: translateY(-50%);
     z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .icone-legenda {
