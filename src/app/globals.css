@@ -109,7 +109,7 @@ button {
     top: 50%;
     transform: translateY(-50%);
     z-index: 9999;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .icone-legenda {
@@ -191,8 +191,8 @@ button {
 }
 
 .linha-azul {
-    height: 4px;
-    background: #0066ff;
+    height: 0px;
+    border-top: 3px dashed #0066ff;
 }
 
 .linha-tracejada {
