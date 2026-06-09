@@ -304,7 +304,7 @@ export default function MapComponent() {
                                 }}
                                 pathOptions={{
                                     color: "#0066ff",
-                                    weight: rotaAtiva === rotaIndex ? 5 : 2,
+                                    weight: rotaAtiva === rotaIndex ? 5 : 3,
                                     opacity: rotaAtiva === rotaIndex ? 1 : 0.5,
                                     dashArray:
                                         rotaAtiva === rotaIndex ? null : "8, 8",
