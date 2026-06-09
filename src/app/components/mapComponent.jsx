@@ -1,5 +1,6 @@
 "use client";
 
+import { infoRotas } from "../data/infoRotas";
 import { BotaoMapaCompleto } from "../functions/botaoMapaCompleto";
 import { batalhas } from "../data/batalhas";
 import { conquistas } from "../data/consquistas";
@@ -47,11 +48,60 @@ const Tooltip = dynamic(
         ssr: false,
     },
 );
+
+function SetasRota({ rota, ativa }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (!ativa) return;
+
+        async function criarSetas() {
+            await import("leaflet-polylinedecorator");
+
+            const polyline = L.polyline(rota);
+
+            const decorator = L.polylineDecorator(polyline, {
+                patterns: [
+                    {
+                        offset: "10%",
+                        repeat: "30px",
+                        symbol: L.Symbol.arrowHead({
+                            pixelSize: 12,
+                            polygon: true,
+                            pathOptions: {
+                                color: "#00ff00",
+                                fillOpacity: 1,
+                                weight: 2,
+                            },
+                        }),
+                    },
+                ],
+            });
+
+            decorator.addTo(map);
+
+            return decorator;
+        }
+
+        let decorator;
+
+        criarSetas().then((d) => {
+            decorator = d;
+        });
+
+        return () => {
+            if (decorator) {
+                map.removeLayer(decorator);
+            }
+        };
+    }, [ativa, rota, map]);
+
+    return null;
+}
 function MapController() {
     const map = useMap();
 
     useEffect(() => {
-        const L = require("leaflet");
         const normal = L.tileLayer(
             "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         );
@@ -92,6 +142,7 @@ export default function MapComponent() {
     const [inicioIcon, setInicioIcon] = useState(null);
     const [fimIcon, setFimIcon] = useState(null);
     const [paradaIcon, setParadaIcon] = useState(null);
+    const [rotaAtiva, setRotaAtiva] = useState(null);
 
     useEffect(() => {
         import("leaflet").then((L) => {
@@ -238,16 +289,30 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {rotasMediterraneo.map((rota, rotaIndex) => (
-                    <Fragment key={rotaIndex}>
+                {rotasMediterraneo.map((rota, rotaIndex) => {
+                    const info = infoRotas[rotaIndex]
+                    return(
+<Fragment key={rotaIndex}>
                         <Polyline
                             positions={rota}
-                            pathOptions={{
-                                color: "#0066ff",
-                                weight: 2,
-                                opacity: 0.5,
-                                dashArray: "8, 8",
+                            eventHandlers={{
+                                mouseover: () => setRotaAtiva(rotaIndex),
+                                mouseout: () => setRotaAtiva(null),
                             }}
+                            pathOptions={{
+                                color:
+                                    rotaAtiva === rotaIndex
+                                        ? "#0066ff"
+                                        : "#0066ff",
+                                weight: rotaAtiva === rotaIndex ? 5 : 2,
+                                opacity: rotaAtiva === rotaIndex ? 1 : 0.5,
+                                dashArray:
+                                    rotaAtiva === rotaIndex ? null : "8, 8",
+                            }}
+                        />
+                        <SetasRota
+                            rota={rota}
+                            ativa={rotaAtiva === rotaIndex}
                         />
 
                         {rota.map((ponto, pontoIndex) => (
@@ -261,10 +326,17 @@ export default function MapComponent() {
                                           ? fimIcon
                                           : paradaIcon
                                 }
+                                eventHandlers={{
+                                    mouseover: () => setRotaAtiva(rotaIndex),
+                                    mouseout: () => setRotaAtiva(null),
+                                }}
                             />
-                        ))}
-                    </Fragment>
-                ))}
+                            </Fragment>
+                        ),
+                        
+                )}
+
+                    
                 {batalhaIcon &&
                     batalhas.map((batalha, index) => (
                         <Marker
@@ -409,7 +481,7 @@ export default function MapComponent() {
                         </Marker>
                     ))}
                 {difusaoHelenistica.map((item, index) => (
-                    <div key={index}>
+                    <Fragment key={index}>
                         <Polyline
                             positions={item.cidades.map(
                                 (cidade) => cidade.posicao,
@@ -441,7 +513,7 @@ export default function MapComponent() {
                                 </Popup>
                             </Marker>
                         ))}
-                    </div>
+                    </Fragment>
                 ))}
                 {cidades.map((cidade, index) => (
                     <Marker

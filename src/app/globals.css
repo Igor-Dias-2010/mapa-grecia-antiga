@@ -72,6 +72,7 @@ h1 {
 .markers:hover {
     transform: scale(1.2);
     box-shadow: 0 0 15px black;
+    z-index: 9999999999999;
 }
 .markers:active {
     transform: scale(0.9);
