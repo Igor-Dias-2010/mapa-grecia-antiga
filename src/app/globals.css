@@ -288,3 +288,6 @@ button {
     filter: grayscale(100%);
     opacity: 0.4;
 }
+.filtros input{
+    cursor: pointer;
+}
