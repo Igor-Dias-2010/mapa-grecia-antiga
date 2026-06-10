@@ -1,5 +1,6 @@
 "use client";
 
+import Filtros from "./filtros";
 import Legendas from "./legendas";
 import { infoRotas } from "../data/infoRotas";
 import { BotaoMapaCompleto } from "../functions/botaoMapaCompleto";
@@ -144,6 +145,16 @@ export default function MapComponent() {
     const [fimIcon, setFimIcon] = useState(null);
     const [paradaIcon, setParadaIcon] = useState(null);
     const [rotaAtiva, setRotaAtiva] = useState(null);
+    const [filtros, setFiltros] = useState({
+        batalhas: true,
+        conquistas: true,
+        cidades: true,
+        centros: true,
+        portos: true,
+        comerciais: true,
+        rotas: true,
+        difusao: true,
+    });
 
     useEffect(() => {
         import("leaflet").then((L) => {
@@ -233,7 +244,8 @@ export default function MapComponent() {
     }, []);
     return (
         <div>
-            <Legendas />
+            <Filtros filtros={filtros} setFiltros={setFiltros} />
+            <Legendas filtros={filtros} />
             <MapContainer
                 center={[35, 40]}
                 zoom={4}
@@ -241,14 +253,8 @@ export default function MapComponent() {
             >
                 <MapController />
                 <BotaoMapaCompleto />
-                <Polyline
-                    positions={rotas}
-                    pathOptions={{
-                        color: "red",
-                        weight: 4,
-                    }}
-                />
-                {portoIcon &&
+                {filtros.portos &&
+                    portoIcon &&
                     portos.map((porto, index) => (
                         <Marker
                             key={index}
@@ -269,7 +275,8 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {comercialIcon &&
+                {filtros.comerciais &&
+                    comercialIcon &&
                     cidadesComerciais.map((cidade, index) => (
                         <Marker
                             key={index}
@@ -291,72 +298,80 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {rotasMediterraneo.map((rota, rotaIndex) => {
-                    const info = infoRotas[rotaIndex];
+                {filtros.rotas &&
+                    rotasMediterraneo.map((rota, rotaIndex) => {
+                        const info = infoRotas[rotaIndex];
 
-                    return (
-                        <Fragment key={rotaIndex}>
-                            <Polyline
-                                positions={rota}
-                                eventHandlers={{
-                                    mouseover: () => setRotaAtiva(rotaIndex),
-                                    mouseout: () => setRotaAtiva(null),
-                                }}
-                                pathOptions={{
-                                    color: "#0066ff",
-                                    weight: rotaAtiva === rotaIndex ? 5 : 3,
-                                    opacity: rotaAtiva === rotaIndex ? 1 : 0.5,
-                                    dashArray:
-                                        rotaAtiva === rotaIndex ? null : "8, 8",
-                                }}
-                            />
+                        return (
+                            <Fragment key={rotaIndex}>
+                                <Polyline
+                                    positions={rota}
+                                    eventHandlers={{
+                                        mouseover: () =>
+                                            setRotaAtiva(rotaIndex),
+                                        mouseout: () => setRotaAtiva(null),
+                                    }}
+                                    pathOptions={{
+                                        color: "#0066ff",
+                                        weight: rotaAtiva === rotaIndex ? 5 : 3,
+                                        opacity:
+                                            rotaAtiva === rotaIndex ? 1 : 0.5,
+                                        dashArray:
+                                            rotaAtiva === rotaIndex
+                                                ? null
+                                                : "8, 8",
+                                    }}
+                                />
 
-                            <SetasRota
-                                rota={rota}
-                                ativa={rotaAtiva === rotaIndex}
-                            />
+                                <SetasRota
+                                    rota={rota}
+                                    ativa={rotaAtiva === rotaIndex}
+                                />
 
-                            {rota.map((ponto, pontoIndex) => {
-                                const nomePonto = info.pontos[pontoIndex];
+                                {rota.map((ponto, pontoIndex) => {
+                                    const nomePonto = info.pontos[pontoIndex];
 
-                                return (
-                                    <Marker
-                                        key={`${rotaIndex}-${pontoIndex}`}
-                                        position={ponto}
-                                        icon={
-                                            pontoIndex === 0
-                                                ? inicioIcon
-                                                : pontoIndex === rota.length - 1
-                                                  ? fimIcon
-                                                  : paradaIcon
-                                        }
-                                        eventHandlers={{
-                                            mouseover: () =>
-                                                setRotaAtiva(rotaIndex),
-                                            mouseout: () => setRotaAtiva(null),
-                                        }}
-                                    >
-                                        <Tooltip
-                                            direction="top"
-                                            offset={[9, -15]}
-                                            opacity={1}
+                                    return (
+                                        <Marker
+                                            key={`${rotaIndex}-${pontoIndex}`}
+                                            position={ponto}
+                                            icon={
+                                                pontoIndex === 0
+                                                    ? inicioIcon
+                                                    : pontoIndex ===
+                                                        rota.length - 1
+                                                      ? fimIcon
+                                                      : paradaIcon
+                                            }
+                                            eventHandlers={{
+                                                mouseover: () =>
+                                                    setRotaAtiva(rotaIndex),
+                                                mouseout: () =>
+                                                    setRotaAtiva(null),
+                                            }}
                                         >
-                                            {nomePonto}
-                                        </Tooltip>
+                                            <Tooltip
+                                                direction="top"
+                                                offset={[9, -15]}
+                                                opacity={1}
+                                            >
+                                                {nomePonto}
+                                            </Tooltip>
 
-                                        <Popup>
-                                            <h2>{nomePonto}</h2>
-                                            <h3>{info.nome}</h3>
-                                            <p>{info.importancia}</p>
-                                        </Popup>
-                                    </Marker>
-                                );
-                            })}
-                        </Fragment>
-                    );
-                })}
+                                            <Popup>
+                                                <h2>{nomePonto}</h2>
+                                                <h3>{info.nome}</h3>
+                                                <p>{info.importancia}</p>
+                                            </Popup>
+                                        </Marker>
+                                    );
+                                })}
+                            </Fragment>
+                        );
+                    })}
 
-                {batalhaIcon &&
+                {filtros.batalhas &&
+                    batalhaIcon &&
                     batalhas.map((batalha, index) => (
                         <Marker
                             key={index}
@@ -397,7 +412,16 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {conquistas &&
+                {filtros.conquistas && (
+                    <Polyline
+                        positions={rotas}
+                        pathOptions={{
+                            color: "red",
+                            weight: 4,
+                        }}
+                    />
+                )}
+                {filtros.conquistas &&
                     conquistas.map((local, index) => (
                         <Marker
                             key={index}
@@ -442,7 +466,8 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {centro &&
+                {filtros.centros &&
+                    centro &&
                     centro.map((centro, index) => (
                         <Marker
                             key={index}
@@ -499,63 +524,69 @@ export default function MapComponent() {
                             </Popup>
                         </Marker>
                     ))}
-                {difusaoHelenistica.map((item, index) => (
-                    <Fragment key={index}>
-                        <Polyline
-                            positions={item.cidades.map(
-                                (cidade) => cidade.posicao,
-                            )}
-                            pathOptions={{
-                                color: item.cor,
-                                weight: 2,
-                                dashArray: "7, 7",
-                            }}
-                        />
-
-                        {item.cidades.map((cidade, i) => (
-                            <Marker
-                                key={i}
-                                position={cidade.posicao}
-                                icon={iconesDifusao[item.nome]}
-                            >
-                                <Tooltip
-                                    direction="top"
-                                    offset={[9, -15]}
-                                    opacity={1}
-                                >
-                                    {item.nome}
-                                </Tooltip>
-
-                                <Popup>
-                                    <h2>{item.nome}</h2>
-                                    <p>{cidade.nome}</p>
-                                </Popup>
-                            </Marker>
-                        ))}
-                    </Fragment>
-                ))}
-                {cidades.map((cidade, index) => (
-                    <Marker
-                        key={index}
-                        position={cidade.posicao}
-                        icon={cidadesIcon}
-                    >
-                        <Tooltip direction="top" offset={[9, -15]} opacity={1}>
-                            {cidade.nome}
-                        </Tooltip>
-                        <Popup
-                            className="popup"
-                            direction="top"
-                            offset={[8, -5]}
-                            opacity={1}
-                        >
-                            <CityPopup
-                                cidade={cidade}
-                                abrirImagem={setImagemAberta}
+                {filtros.difusao &&
+                    difusaoHelenistica.map((item, index) => (
+                        <Fragment key={index}>
+                            <Polyline
+                                positions={item.cidades.map(
+                                    (cidade) => cidade.posicao,
+                                )}
+                                pathOptions={{
+                                    color: item.cor,
+                                    weight: 2,
+                                    dashArray: "7, 7",
+                                }}
                             />
-                        </Popup>
-                    </Marker>
-                ))}
+
+                            {item.cidades.map((cidade, i) => (
+                                <Marker
+                                    key={i}
+                                    position={cidade.posicao}
+                                    icon={iconesDifusao[item.nome]}
+                                >
+                                    <Tooltip
+                                        direction="top"
+                                        offset={[9, -15]}
+                                        opacity={1}
+                                    >
+                                        {item.nome}
+                                    </Tooltip>
+
+                                    <Popup>
+                                        <h2>{item.nome}</h2>
+                                        <p>{cidade.nome}</p>
+                                    </Popup>
+                                </Marker>
+                            ))}
+                        </Fragment>
+                    ))}
+                {filtros.cidades &&
+                    cidades.map((cidade, index) => (
+                        <Marker
+                            key={index}
+                            position={cidade.posicao}
+                            icon={cidadesIcon}
+                        >
+                            <Tooltip
+                                direction="top"
+                                offset={[9, -15]}
+                                opacity={1}
+                            >
+                                {cidade.nome}
+                            </Tooltip>
+                            <Popup
+                                className="popup"
+                                direction="top"
+                                offset={[8, -5]}
+                                opacity={1}
+                            >
+                                <CityPopup
+                                    cidade={cidade}
+                                    abrirImagem={setImagemAberta}
+                                />
+                            </Popup>
+                        </Marker>
+                    ))}
             </MapContainer>
             {imagemAberta && (
                 <div

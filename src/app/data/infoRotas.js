@@ -23,62 +23,63 @@ export const infoRotas = [
     {
         nome: "Rota do Trigo Ptolomaico",
         importancia:
-            "Transportava trigo egípcio para abastecer cidades gregas e outras regiões do Mediterrâneo Oriental.",
+            "Transportava trigo egípcio e fortalecia o abastecimento das cidades do Mar Egeu.",
         pontos: ["Alexandria", "Rodes", "Atenas"],
     },
 
     {
         nome: "Rota do Levante Selêucida",
         importancia:
-            "Ligava Antioquia aos grandes portos do Egeu, favorecendo o comércio entre Síria, Anatólia e Grécia.",
+            "Ligava Antioquia aos grandes portos da Ásia Menor e do Egeu, impulsionando o comércio regional.",
         pontos: ["Antioquia", "Rodes", "Éfeso"],
     },
 
     {
         nome: "Rota do Vidro Fenício",
         importancia:
-            "Levava vidro, corantes e produtos artesanais fenícios até os mercados egípcios.",
+            "Levava vidro, púrpura e produtos artesanais produzidos pelos fenícios até Alexandria.",
         pontos: ["Tiro", "Alexandria"],
     },
 
     {
         nome: "Rota de Sidon",
         importancia:
-            "Integrava os centros comerciais fenícios ao sistema econômico do Egito helenístico.",
+            "Conectava Sidon aos mercados egípcios para a circulação de produtos manufaturados e mercadorias marítimas.",
         pontos: ["Sidon", "Alexandria"],
     },
 
     {
         nome: "Rota dos Escravos e Redistribuição",
         importancia:
-            "Movimentava escravos e mercadorias pelo Egeu, tendo Delos como um dos principais mercados.",
+            "Delos era um dos maiores mercados de escravos do Mediterrâneo e redistribuía mercadorias para diversas regiões.",
         pontos: ["Delos", "Éfeso", "Rodes"],
     },
 
     {
         nome: "Rota Éfeso–Atenas",
         importancia:
-            "Ligava dois importantes centros comerciais e culturais do mundo grego.",
+            "Ligava dois dos mais importantes polos comerciais e culturais do mundo grego.",
         pontos: ["Éfeso", "Atenas"],
     },
 
     {
         nome: "Rota Mileto–Corinto",
         importancia:
-            "Favorecia o intercâmbio comercial entre a costa jônica e a Grécia continental.",
+            "Facilitava o comércio marítimo entre a costa jônica e a Grécia continental.",
         pontos: ["Mileto", "Corinto"],
     },
 
     {
         nome: "Rota do Estreito de Bósforo",
-        importancia: "Controlava a ligação entre o Mar Negro e o Mar Egeu.",
+        importancia:
+            "Garantia o acesso entre o Mar Negro e o Mar Egeu, essencial para o transporte de cereais.",
         pontos: ["Bizâncio", "Atenas"],
     },
 
     {
         nome: "Rota Bizâncio–Delos",
         importancia:
-            "Ligava Bizâncio ao principal centro comercial das Cíclades.",
+            "Ligava Bizâncio ao importante centro comercial e financeiro de Delos.",
         pontos: ["Bizâncio", "Delos"],
     },
 
@@ -92,34 +93,35 @@ export const infoRotas = [
     {
         nome: "Rota do Mar Negro Meridional",
         importancia:
-            "Ligava os portos da costa sul do Mar Negro aos centros comerciais do Egeu.",
+            "Conectava Sinope aos mercados do Egeu e favorecia o comércio marítimo regional.",
         pontos: ["Sinope", "Delos"],
     },
 
     {
         nome: "Rota Jônica Central",
         importancia:
-            "Conectava a Grécia ao sul da Itália através do Mar Jônico.",
+            "Interligava Corinto, Corfu e Otranto, aproximando a Grécia da Península Itálica.",
         pontos: ["Corinto", "Corfu", "Otranto"],
     },
 
     {
         nome: "Rota Magna Grécia–Sicília",
-        importancia: "Ligava as colônias gregas do sul da Itália e da Sicília.",
+        importancia:
+            "Conectava Siracusa, Tarento e Corinto, fortalecendo as colônias gregas do sul da Itália.",
         pontos: ["Siracusa", "Tarento", "Corinto"],
     },
 
     {
         nome: "Rota Siracusa–Alexandria",
         importancia:
-            "Importante ligação marítima entre a Sicília e o Egito ptolomaico.",
+            "Importante ligação marítima entre a Sicília e o Egito ptolomaico para transporte de alimentos e mercadorias.",
         pontos: ["Siracusa", "Alexandria"],
     },
 
     {
         nome: "Rota Siracusa–Roma",
         importancia:
-            "Conectava a Sicília à Península Itálica, essencial para o abastecimento regional.",
+            "Ligava a Sicília à Península Itálica e era estratégica para o abastecimento romano.",
         pontos: ["Siracusa", "Roma"],
     },
 
@@ -133,55 +135,56 @@ export const infoRotas = [
     {
         nome: "Rota de Massália",
         importancia:
-            "Conectava a Gália mediterrânica aos mercados da Itália e da Grécia.",
+            "Conectava Massália às ilhas mediterrâneas, à Itália e à Grécia, ampliando o comércio ocidental.",
         pontos: ["Massália", "Córsega", "Sardenha", "Campânia", "Atenas"],
     },
 
     {
         nome: "Rota Ibérica de Metais",
         importancia:
-            "Transportava prata, cobre e outros metais da Península Ibérica.",
+            "Transportava metais preciosos da Península Ibérica para outros mercados mediterrânicos.",
         pontos: ["Emporion", "Cartago Nova", "Massália"],
     },
 
     {
         nome: "Rota do Estreito de Gibraltar",
         importancia:
-            "Ligava o Mediterrâneo ao Oceano Atlântico e permitia o comércio de longa distância.",
+            "Ligava o Mediterrâneo ao Atlântico e possibilitava rotas comerciais de longa distância.",
         pontos: ["Gadir", "Costa Ibérica", "Sul da Itália"],
     },
 
     {
         nome: "Rota Cartaginesa–Líbica",
         importancia:
-            "Conectava Cartago aos grandes centros comerciais do Mediterrâneo Oriental.",
+            "Conectava Cartago ao Egito e ao Mediterrâneo Oriental por importantes corredores marítimos.",
         pontos: ["Cartago", "Alexandria"],
     },
 
     {
         nome: "Rota do Tirreno",
-        importancia: "Integrava os portos etruscos, a Campânia e a Sicília.",
+        importancia:
+            "Integrava Elba, Campânia e Siracusa dentro da rede comercial do Mar Tirreno.",
         pontos: ["Elba", "Campânia", "Siracusa"],
     },
 
     {
         nome: "Rota Marítima da Índia",
         importancia:
-            "Levava especiarias e produtos orientais até Alexandria através do Mar Vermelho.",
+            "Levava especiarias, pedras preciosas e produtos orientais do Mar Vermelho até Alexandria.",
         pontos: ["Berenice", "Alexandria"],
     },
 
     {
         nome: "Rota Terrestre do Incenso",
         importancia:
-            "Transportava incenso, mirra e produtos árabes até os portos mediterrânicos.",
+            "Transportava incenso, mirra e outros produtos árabes através de Gaza até o Mediterrâneo.",
         pontos: ["Gaza", "Alexandria"],
     },
 
     {
         nome: "Rota da Seda Marítima e Síria",
         importancia:
-            "Ligava as rotas asiáticas aos portos sírios, permitindo a entrada de produtos orientais no Mediterrâneo.",
+            "Conectava Antioquia às redes comerciais orientais, permitindo a chegada de produtos asiáticos ao Mediterrâneo.",
         pontos: ["Antioquia", "Alexandria"],
     },
 ];

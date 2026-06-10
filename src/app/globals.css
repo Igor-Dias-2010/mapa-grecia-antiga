@@ -199,3 +199,92 @@ button {
     height: 0;
     border-top: 3px dashed black;
 }
+.filtros {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9999;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.icone-filtros {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border-radius: 12px 0 0 12px;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.filtros-conteudo {
+    position: absolute;
+
+    right: 56px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 260px;
+
+    padding: 14px;
+
+    background: rgba(255, 255, 255, 0.98);
+
+    border-radius: 12px;
+
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.filtros-conteudo h3 {
+    margin-top: 0;
+}
+
+.filtros-conteudo label {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 8px 0;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.filtros-conteudo button {
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 6px;
+
+    cursor: pointer;
+}
+.filtros-conteudo.aberto {
+    opacity: 1;
+    pointer-events: auto;
+}
+.filtro-desativado{
+    filter: grayscale(100%);
+    opacity: 0.4;
+}
